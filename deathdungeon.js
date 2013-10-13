@@ -1,13 +1,15 @@
 var clc = require('cli-color')
 var error = clc.red.bold;
 var warn = clc.yellow;
-var notice = clc.blue;
+var notice = clc.cyan;
+var deathdungeon = clc.black.bgWhite;
+var say = clc.green;
 
-console.log(error('Error!'));
-console.log(warn('Warning'));
-console.log(notice('Notice'));
+console.log(deathdungeon('deathdungeon:')+' dungeon is open');
 
 var fs = require('fs');
+
+var clients = [];
 
 var mario = require('mario-mario');
 mario.plumbing({
@@ -17,11 +19,11 @@ mario.plumbing({
 			'/' : function (q,r) {
 				return fs.readFile('./client.html',function(e,d){
 					if (e) {
-						console.log("deathdungeon:"+error('error reading ./client.html'));
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./client.html'));
 						r.setHeader('Content-Type','application/json');
 						return r.send({error:'error reading ./client.html'});
 					} else {
-						console.log("deathdungeon:"+warn('/'));
+						console.log(deathdungeon('deathdungeon:')+warn('/'));
 						r.setHeader('Content-Type','text/html');
 						return r.send(d);
 					}
@@ -35,7 +37,7 @@ mario.plumbing({
 			'/client.js' : function(q,r) {
 				return fs.readFile('./client.js',function(e,d){
 					if (e) {
-						console.log(error('deathdungeon: error reading ./client.js'));
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./client.js'));
 						r.setHeader('Content-Type','application/json');
 						return r.send({error:'error reading ./client.js'});
 					} else {
@@ -60,9 +62,16 @@ mario.plumbing({
 		'broadcast:echo' : function (q) {
 			return q.io.broadcast('broadcast:echo','broadcast:echo');
 		},
+		'unicast:user:create' : function(q) {
+			var token = Math.random().toString(36).substring(7);
+			var username = Math.random().toString(36).substring(7);
+			clients.push({token:token,username:username});
+			console.log(deathdungeon('deathdungeon:')+notice(token+':'+username));
+			return q.io.emit('unicast:user:update',{token:token,username:username});
+		},
 		'broadcast:chat:update' : function(q) {
-			console.log(notice(q.data));
-			return q.io.broadcast('broadcast:chat:update',q.data);
+			console.log(deathdungeon('deathdungeon:')+say(q.data.token+':'+q.data.username+': '+q.data.say));
+			return q.io.broadcast('broadcast:chat:update',q.data.username+': '+q.data.say);
 		}
 	}
 });
