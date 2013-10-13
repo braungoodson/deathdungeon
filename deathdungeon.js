@@ -9,7 +9,7 @@ console.log(deathdungeon('deathdungeon:')+' dungeon is open');
 
 var fs = require('fs');
 
-var clients = [];
+var players = [];
 
 var mario = require('mario-mario');
 mario.plumbing({
@@ -45,17 +45,30 @@ mario.plumbing({
 		}
 	},
 	socket: {
-		'unicast:user:create' : function(q) {
+		'create player' : function(q) {
 			var token = Math.random().toString(36).substring(7);
-			var username = Math.random().toString(36).substring(7);
-			clients.push({token:token,username:username});
-			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+username));
-			return q.io.emit('unicast:user:update',{token:token,username:username})
-				+ q.io.broadcast('broadcast:chat:update',{username:'server',say:'Welcome '+username+'.'});
+			players.push({
+				token: token,
+				username: q.data.username,
+				color: q.data.color
+			});
+			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+q.data.username));
+			return q.io.emit('here are your credentials',{
+				token: token,
+				username: q.data.username,
+				color: q.data.color
+			}) + q.io.broadcast('here is a new player',{
+				username: q.data.username,
+				color: q.data.color
+			});
 		},
-		'broadcast:chat:update' : function(q) {
+		'someone said something' : function(q) {
 			console.log(deathdungeon('deathdungeon:')+say(q.data.token+':'+q.data.username+': '+q.data.say));
-			return q.io.broadcast('broadcast:chat:update',{username:q.data.username,say:q.data.say});
+			return q.io.broadcast('someone said something',{
+				username: q.data.username,
+				say: q.data.say,
+				color: q.data.color
+			});
 		}
 	}
 });
