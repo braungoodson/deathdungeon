@@ -1,14 +1,14 @@
 var token = null;
-var username = 'server';
+var username = null;
 var s = io.connect();
 s.on('unicast:user:update',function(d){
 	token = d.token;
 	username = d.username;
 });
 s.on('broadcast:chat:update',function(d){
-	console.log("broadcast:chat:update:"+d);
+	console.log("broadcast:chat:update:"+d.username+': '+d.say);
 	var e = document.getElementById('said');
-	e.innerHTML += d+"<br/>";
+	e.innerHTML += d.username+': '+d.say+"<br/>";
 	e.scrollTop = e.scrollHeight;
 });
 function speak() {
@@ -17,5 +17,4 @@ function speak() {
 	console.log('broadcast:chat:update:say:'+say);
 	s.emit('broadcast:chat:update',{token:token,username:username,say:say});
 }
-s.emit('broadcast:chat:update',{token:token,username:username,say:'new client'});
 s.emit('unicast:user:create');
