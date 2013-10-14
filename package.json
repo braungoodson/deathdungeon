@@ -7,13 +7,6 @@
     "mario-mario": "0.0.2",
     "cli-color": "~0.2.3"
   },
-  "devDependencies": {
-    "mocha": "~1.13.0",
-    "expect.js": "~0.2.0"
-  },
-  "scripts": {
-    "test": "make test"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/braungoodson/deathdungeon.git"
