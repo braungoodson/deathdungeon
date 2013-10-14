@@ -4,10 +4,12 @@
   "description": "Fantasy based MMO RPG.",
   "main": "deathdungeon.js",
   "dependencies": {
-    "mario-mario": "~0.0.2",
+    "mario-mario": "0.0.2",
     "cli-color": "~0.2.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "~1.13.0"
+  },
   "scripts": {
     "test": "make test"
   },
