@@ -89,10 +89,12 @@ canvas.height = 400;
 canvas.width = 600;
 var context = canvas.getContext('2d');
 
+//
+var mapDrawn = false;
 var png = new Image();
 png.src = 'dungeon-map-001.png';
 png.onload = function () {
-	context.drawImage(png,-300,-300);
+	mapDrawn = true;
 }
 
 //
@@ -122,6 +124,7 @@ player.prototype.draw = function () {
 	context.stroke();
 }
 
+//
 function drawPlayers() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.drawImage(png,-350,-300);
@@ -131,8 +134,9 @@ function drawPlayers() {
 	}
 }
 
+//
 var t = setTimeout(function(){
-	if (numPngsDownloaded == players.length) {
+	if ((numPngsDownloaded == players.length) && (mapDrawn)) {
 		return drawPlayers() + clearTimeout(t);
 	}
 },10);
