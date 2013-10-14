@@ -1,0 +1,30 @@
+{
+  "name": "deathdungeon",
+  "version": "0.0.2",
+  "description": "Fantasy based MMO RPG.",
+  "main": "deathdungeon.js",
+  "dependencies": {
+    "mario-mario": "~0.0.2",
+    "cli-color": "~0.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/braungoodson/deathdungeon.git"
+  },
+  "keywords": [
+    "web",
+    "sockets",
+    "socket.io",
+    "mario-mario",
+    "express.io"
+  ],
+  "author": "Braun Goodson <braungoodson@gmail.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/braungoodson/deathdungeon/issues"
+  }
+}
