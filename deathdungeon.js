@@ -43,6 +43,32 @@ mario.plumbing({
 						return r.send(d);
 					}
 				});
+			},
+			'/dungeon-map-001.png' : function(q,r) {
+				return fs.readFile('./dungeon-map-001.png',function(e,d){
+					if (e) {
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./dungeon-map-001.png'));
+						r.setHeader('Content-Type','application/json');
+						return r.send({error:'error reading ./dungeon-map-001.png'});
+					} else {
+						console.log(deathdungeon('deathdungeon:')+warn('/dungeon-map-001.png'));
+						r.setHeader('Content-Type','image/png');
+						return r.send(d);
+					}
+				});
+			},
+			'/player-icon-white.png' : function(q,r) {
+				return fs.readFile('./player-icon-white.png',function(e,d){
+					if (e) {
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./player-icon-white.png'));
+						r.setHeader('Content-Type','application/json');
+						return r.send({error:'error reading ./player-icon-white.png'});
+					} else {
+						console.log(deathdungeon('deathdungeon:')+warn('/player-icon-white.png'));
+						r.setHeader('Content-Type','image/png');
+						return r.send(d);
+					}
+				});
 			}
 		}
 	},
