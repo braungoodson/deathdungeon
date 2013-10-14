@@ -1,15 +1,20 @@
 #!/bin/sh
 
-release = 'release-0.0.$1-alpha';
+release='release-0.0.'$1'-alpha';
 
-git commit -am "bumping to $release"
-git push origin master
-git checkout -b $release
+read -p "--> $release ok? (y/n): " decision
 
-echo "deathdungeon [![Build Status](https://travis-ci.org/braungoodson/deathdungeon.png?branch=$release)](https://travis-ci.org/braungoodson/deathdungeon)
-============
+if [ "$decision" = "y" ]; then
+	git commit -am "bumping to $release"
+	git push origin master
+	git checkout -b $release
 
-Fantasy based MMO RPG." > README.md
-git commit -am "+ build status"
-git push origin $release
-git checkout master
+	echo "deathdungeon
+	============
+
+	Fantasy based MMO RPG." > README.md
+
+	git commit -am "+ build status"
+	git push origin $release
+	git checkout master
+fi
