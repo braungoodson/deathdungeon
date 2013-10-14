@@ -1,0 +1,15 @@
+#!/bin/sh
+
+release = 'release-0.0.$1-alpha';
+
+git commit -am "bumping to $release"
+git push origin master
+git checkout -b $release
+
+echo "deathdungeon [![Build Status](https://travis-ci.org/braungoodson/deathdungeon.png?branch=$release)](https://travis-ci.org/braungoodson/deathdungeon)
+============
+
+Fantasy based MMO RPG." > README.md
+git commit -am "+ build status"
+git push origin $release
+git checkout master
