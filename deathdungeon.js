@@ -8,8 +8,10 @@ var say = clc.green;
 console.log(deathdungeon('deathdungeon:')+' dungeon is open');
 
 var fs = require('fs');
+var uuid = require('node-uuid');
 
 var players = [];
+var playerTokens = [];
 
 var mario = require('mario-mario');
 mario.plumbing({
@@ -45,20 +47,44 @@ mario.plumbing({
 		}
 	},
 	socket: {
+		'kill player' : function(q) {
+			if (players[q.data.killer.token]) {
+				if (playerTokens[q.data.victim.player]) {
+					var victimToken = playerTokens[q.data.victim.player];
+					q.io.broadcast('player killed',{
+						player: q.data.victim.player,
+						color: players[victimToken].color
+					});
+					players[victimToken].color = '#ccc';
+					console.log(deathdungeon('deathdungeon:muder:'+q.data.victim.player));
+				}
+			}
+		},
 		'create player' : function(q) {
-			var token = Math.random().toString(36).substring(7);
-			players.push({
-				token: token,
-				username: q.data.username,
+			var token = null;
+			if (!q.data.token) {
+				token = uuid.v4();
+			} else {
+				token = q.data.token;
+			}
+			var player = null;
+			if (!q.data.player) {
+				player = uuid.v1();
+			} else {
+				player = q.data.player;
+			}
+			players[token] = {
+				username: player,
 				color: q.data.color
-			});
-			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+q.data.username));
+			};
+			playerTokens[player] = token;
+			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+player));
 			return q.io.emit('here are your credentials',{
 				token: token,
-				username: q.data.username,
+				username: player,
 				color: q.data.color
 			}) + q.io.broadcast('here is a new player',{
-				username: q.data.username,
+				username: player,
 				color: q.data.color
 			});
 		},
@@ -67,7 +93,7 @@ mario.plumbing({
 			return q.io.broadcast('someone said something',{
 				username: q.data.username,
 				say: q.data.say,
-				color: q.data.color
+				color: players[q.data.token].color
 			});
 		}
 	}

@@ -5,7 +5,8 @@
   "main": "deathdungeon.js",
   "dependencies": {
     "mario-mario": "0.0.2",
-    "cli-color": "~0.2.3"
+    "cli-color": "~0.2.3",
+    "node-uuid": "~1.4.1"
   },
   "repository": {
     "type": "git",

@@ -27,6 +27,13 @@ s.on('here is a new player',function(d){
 });
 
 //
+s.on('player killed',function(d){
+	var e = document.getElementById('said');
+	e.innerHTML += "Player <span style='color:"+d.color+";'>"+d.player+"</span> has been murdered.<br/>";
+	e.scrollTop = e.scrollHeight;
+});
+
+//
 function speak() {
 	var input = document.getElementById('say');
 	var say = input.value;
@@ -41,15 +48,30 @@ function speak() {
 
 function happen() {
 	var input = document.getElementById('say');
-	var action = input.value;
-	switch (action.substring(0,action.indexOf(' '))) {
+	var action = input.value.substring(0,input.value.indexOf(' '));
+	switch (action) {
+		case 'kill' : 
+			var victim = input.value.substring(input.value.indexOf(' ')+1,input.value.length);
+			s.emit('kill player',{
+				killer: {
+					player: username,
+					token: token,
+					color: color
+				},
+				victim: {
+					player: victim
+				}
+			});
+			break;
+		//
 		case 'username' : 
 			s.emit('create player',{
-				username: action.substring(action.indexOf(' ')+1,action.length),
+				player: input.value.substring(input.value.indexOf(' ')+1,input.value.length),
+				token: token,
 				color: '#'+Math.floor(Math.random()*16777215).toString(16)
 			}); 
 			break;
-
+		//
 		default: 
 			console.log(username,color,action.value); 
 			break;
@@ -58,7 +80,6 @@ function happen() {
 
 //
 s.emit('create player',{
-	username: Math.random().toString(36).substring(7),
 	color: '#'+Math.floor(Math.random()*16777215).toString(16)
 });
 
