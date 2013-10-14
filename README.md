@@ -1,4 +1,4 @@
-deathdungeon [![Build Status](https://travis-ci.org/braungoodson/deathdungeon.png?branch=)](https://travis-ci.org/braungoodson/deathdungeon)
-============
+deathdungeon
+	============
 
-Fantasy based MMO RPG.
+	Fantasy based MMO RPG.
