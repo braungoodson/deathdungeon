@@ -2,19 +2,38 @@
 
 release='release-0.0.'$1'-alpha';
 
+echo "\\033[41m"
 read -p "--> $release ok? (y/n): " decision
 
+echo "\\033[0m"
+
 if [ "$decision" = "y" ]; then
-	git commit -am "bumping to $release"
-	git push origin master
-	git checkout -b $release
+	echo "\\033[31m" `
+		git commit -am "bumping to $release"
+	` "\\033{0m"
+
+	echo "\\033[32m" `
+		git push origin master
+	` "\\033{0m"
+
+	echo "\\033[33m" `
+		git checkout -b $release
+	` "\\033{0m"
 
 	echo "deathdungeon
 	============
 
 	Fantasy based MMO RPG." > README.md
 
-	git commit -am "+ build status"
-	git push origin $release
-	git checkout master
+	echo "\\033[34m" `
+		git commit -am "+ build status"
+	` "\\033{0m"
+
+	echo "\\033[35m" `
+		git push origin $release
+	` "\\033{0m"
+
+	echo "\\033[36m" `
+		git checkout master
+	` "\\033{0m"
 fi
