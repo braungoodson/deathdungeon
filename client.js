@@ -1,20 +1,20 @@
 var token = null;
-var username = null;
+var playername = null;
 var color = null;
 var s = io.connect();
 
 //
 s.on('here are your credentials',function(d){
 	token = d.token;
-	username = d.username;
+	playername = d.playername;
 	color = d.color;
 });
 
 //
 s.on('someone said something',function(d){
-	console.log("someone said something"+d.username+': '+d.say);
+	console.log("someone said something"+d.playername+': '+d.say);
 	var e = document.getElementById('said');
-	e.innerHTML += "<span style='color:"+d.color+"'>"+d.username+'</span>: '+d.say+"<br/>";
+	e.innerHTML += "<span style='color:"+d.color+"'>"+d.playername+'</span>: '+d.say+"<br/>";
 	e.scrollTop = e.scrollHeight;
 });
 
@@ -22,14 +22,30 @@ s.on('someone said something',function(d){
 s.on('here is a new player',function(d){
 	console.log('here is a new player');
 	var e = document.getElementById('said');
-	e.innerHTML += "> Welcome <span style='color:"+d.color+"'>"+d.username+"</span>.<br/>";
+	e.innerHTML += "> Welcome <span style='color:"+d.color+"'>"+d.playername+"</span>.<br/>";
 	e.scrollTop = e.scrollHeight;
 });
 
 //
 s.on('player killed',function(d){
 	var e = document.getElementById('said');
-	e.innerHTML += "Player <span style='color:"+d.color+";'>"+d.player+"</span> has been murdered.<br/>";
+	e.innerHTML += "> Player <span style='color:"+d.color+";'>"+d.player+"</span> has been murdered.<br/>";
+	e.scrollTop = e.scrollHeight;
+});
+
+//
+s.on('players',function(d){
+	var e = document.getElementById('players');
+	e.innerHTML = "";
+	for (var p in d.players) {
+		e.innerHTML += "<span style='color:"+d.players[p].color+";'>"+d.players[p].playername+"</span><br/>";
+	}
+});
+
+//
+s.on('player already exists',function(d){
+	var e = document.getElementById('said');
+	e.innerHTML += "> Player already exists.<br/>";
 	e.scrollTop = e.scrollHeight;
 });
 
@@ -40,7 +56,7 @@ function speak() {
 	console.log('someone said something'+say);
 	s.emit('someone said something',{
 		token: token,
-		username: username,
+		playername: playername,
 		say: say,
 		color: color
 	});
@@ -54,7 +70,7 @@ function happen() {
 			var victim = input.value.substring(input.value.indexOf(' ')+1,input.value.length);
 			s.emit('kill player',{
 				killer: {
-					player: username,
+					player: playername,
 					token: token,
 					color: color
 				},
@@ -64,79 +80,28 @@ function happen() {
 			});
 			break;
 		//
-		case 'username' : 
+		case 'playername' : 
 			s.emit('create player',{
+				playername: playername,
 				player: input.value.substring(input.value.indexOf(' ')+1,input.value.length),
 				token: token,
-				color: '#'+Math.floor(Math.random()*16777215).toString(16)
+				color: '#'+Math.floor(Math.random()*16777215).toString(16),
+				renew: true
 			}); 
 			break;
 		//
 		default: 
-			console.log(username,color,action.value); 
+			console.log(playername,color,action.value); 
 			break;
 	}
 }
 
 //
 s.emit('create player',{
+	playername: playername,
 	color: '#'+Math.floor(Math.random()*16777215).toString(16)
 });
 
-//
-var canvas = document.getElementById('dungeon-map');
-canvas.height = 400;
-canvas.width = 600;
-var context = canvas.getContext('2d');
-
-//
-var mapDrawn = false;
-var png = new Image();
-png.src = 'dungeon-map-001.png';
-png.onload = function () {
-	mapDrawn = true;
+window.onunload = function () {
+	s.emit('player leaves',{playername:playername,token:token});
 }
-
-//
-var players = [
-	new player('braun','player-icon-white.png')
-];
-var numPngsDownloaded = 0;
-
-//
-function player(pname,png) {
-	this.x = 0;
-	this.y = 0;
-	this.pname = pname;
-	this.png = new Image();
-	this.png.src = png;
-	this.png.onload = function () {
-		numPngsDownloaded++;
-	}
-}
-player.prototype.draw = function () {
-	context.beginPath();
-	context.lineWidth = this.lineWidth;
-	context.strokeStyle = this.stroke;
-	context.fillStyle = this.color;
-	context.arc(this.x,this.y,this.r,0,2*Math.PI);
-	context.closePath();
-	context.stroke();
-}
-
-//
-function drawPlayers() {
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	context.drawImage(png,-350,-300);
-	for (var player in players) {
-		var p = players[player];
-		context.drawImage(p.png,p.x,p.y);
-	}
-}
-
-//
-var t = setTimeout(function(){
-	if ((numPngsDownloaded == players.length) && (mapDrawn)) {
-		return drawPlayers() + clearTimeout(t);
-	}
-},10);
