@@ -1,6 +1,6 @@
 {
   "name": "deathdungeon",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Fantasy based MMO RPG.",
   "main": "deathdungeon.js",
   "dependencies": {

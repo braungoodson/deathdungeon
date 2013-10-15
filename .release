@@ -8,6 +8,7 @@ read -p "--> $release ok? (y/n): " decision
 echo "\\033[0m"
 
 if [ "$decision" = "y" ]; then
+
 	echo "\\033[31m" `
 		git commit -am "bumping to $release"
 	` "\\033{0m"
