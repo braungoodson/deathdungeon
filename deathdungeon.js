@@ -21,13 +21,26 @@ mario.plumbing({
 	http: {
 		get: {
 			'/' : function (q,r) {
-				return fs.readFile('./client.html',function(e,d){
+				return fs.readFile('./index.html',function(e,d){
 					if (e) {
-						console.log(deathdungeon('deathdungeon:')+error('error reading ./client.html'));
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./index.html'));
 						r.setHeader('Content-Type','application/json');
-						return r.send({error:'error reading ./client.html'});
+						return r.send({error:'error reading ./index.html'});
 					} else {
-						console.log(deathdungeon('deathdungeon:')+warn('/client.html'));
+						console.log(deathdungeon('deathdungeon:')+warn('/index.html'));
+						r.setHeader('Content-Type','text/html');
+						return r.send(d);
+					}
+				});
+			},
+			'/deathdungeon.html' : function (q,r) {
+				return fs.readFile('./deathdungeon.html',function(e,d){
+					if (e) {
+						console.log(deathdungeon('deathdungeon:')+error('error reading ./deathdungeon.html'));
+						r.setHeader('Content-Type','application/json');
+						return r.send({error:'error reading ./deathdungeon.html'});
+					} else {
+						console.log(deathdungeon('deathdungeon:')+warn('/deathdungeon.html'));
 						r.setHeader('Content-Type','text/html');
 						return r.send(d);
 					}

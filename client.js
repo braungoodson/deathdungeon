@@ -1,3 +1,7 @@
+
+
+/*
+
 var token = null;
 var playername = null;
 var color = null;
@@ -105,3 +109,250 @@ s.emit('create player',{
 window.onunload = function () {
 	s.emit('player leaves',{playername:playername,token:token});
 }
+
+
+
+*/
+
+function chat(player,body) {
+	this.player = player;
+	this._body = body;
+}
+
+function player(name,type,color) {
+	this.name = name;
+	this.type = type;
+	this.color = color;
+}
+
+var deathdungeon = angular.module('deathdungeon',[]);
+var d = deathdungeon;
+d.config(function($routeProvider){
+	$routeProvider
+		.when('/deathdungeon',{
+			controller: 'deathdungeon',
+			templateUrl: 'deathdungeon.html'
+		})
+		.otherwise({redirectTo:'/deathdungeon'});
+});
+d.controller('deathdungeon',function($scope){
+	$scope.players = [new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),new player('name','type','#88FF88'),];
+	$scope.chats = [
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+new chat($scope.players[0],'I am alive!'),
+];
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
