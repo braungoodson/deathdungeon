@@ -17,7 +17,7 @@ var playerTokens = [];
 
 var mario = require('mario-mario');
 mario.plumbing({
-	port: 24000,
+	port: 80,
 	http: {
 		get: {
 			'/' : function (q,r) {
