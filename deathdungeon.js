@@ -15,6 +15,35 @@ var species = ["vampire","wolf","hybrid","human"];
 var players = [];
 var playerTokens = [];
 
+function gotoJail(player) {
+	player.jailTime = 60000;
+	player.bail = player.jailTime;
+	player.releaseTime = new Date().getMilliseconds() + player.jailTime;
+}
+
+function searchAndJail() {
+	return function () {
+		for (var i in players) {
+			if (players[i].murders > 5) {
+				gotoJail(players[i]);
+			}
+		}
+	}
+}
+
+function searchAndFree() {
+	return function () {
+		for (var in players) {
+			if (players[i].releaseTime <= new Date().getMilliseconds()) {
+				
+			}
+		}
+	}
+}
+
+setInterval(searchAndJail(),30000);
+setInterval(searchAndFree(),10000);
+
 var mario = require('mario-mario');
 mario.plumbing({
 	port: process.env.PORT || 80,
@@ -79,18 +108,21 @@ mario.plumbing({
 			}
 		},
 		'create player' : function(q) {
+			//
 			var token = null;
 			if (!q.data.token) {
 				token = uuid.v4();
 			} else {
 				token = q.data.token;
 			}
+			//
 			var player = null;
 			if (!q.data.player) {
 				player = names[Math.floor(Math.random()*199)] + " (" + species[Math.floor(Math.random()*3)] + ")";
 			} else {
 				player = q.data.player;
 			}
+			//
 			if (q.data.renew) {
 				for (var p in players) {
 					if (players[p].playername == player) {
@@ -98,19 +130,24 @@ mario.plumbing({
 					}
 				}
 			}
+			//
 			players[token] = {
 				playername: player,
 				color: q.data.color
 			};
+			//
 			if (q.data.playername) {
 				delete playerTokens[q.data.playername];
 			}
+			//
 			playerTokens[player] = token;
 			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+player));
+			//
 			var _players = [];
 			for (var p in players) {
 				_players.push(players[p]);
 			}
+			//
 			return q.io.emit('here are your credentials',{
 				token: token,
 				playername: player,
