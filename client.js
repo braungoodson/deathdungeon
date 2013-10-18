@@ -1,13 +1,20 @@
-var token = null;
-var playername = null;
-var color = null;
+function player(player) {
+	this.token = player.token;
+	this.playername = player.playername;
+	this.color = player.color;
+	this.murders = player.murders;
+	this.prisoner = player.prisoner;
+	this.jailTime = player.jailTime;
+	this.bail = player.bail;
+	this.releaseTime = player.releaseTime;
+}
+var p = null;
 var s = io.connect();
 
 //
-s.on('here are your credentials',function(d){
-	token = d.token;
-	playername = d.playername;
-	color = d.color;
+s.on('player:new',function(r){
+	console.log(r.player);
+	p = new player(r.player);
 });
 
 //
@@ -34,11 +41,12 @@ s.on('player killed',function(d){
 });
 
 //
-s.on('players',function(d){
+s.on('players',function(r){
+	var players = r.players;
 	var e = document.getElementById('players');
 	e.innerHTML = "";
-	for (var p in d.players) {
-		e.innerHTML += "<span style='color:"+d.players[p].color+";'>"+d.players[p].playername+"</span><br/>";
+	for (var p in players) {
+		e.innerHTML += "<span style='color:"+players[p].color+";'>"+players[p].name+" ("+players[p].mutation+")</span><br/>";
 	}
 });
 
@@ -81,13 +89,10 @@ function happen() {
 			break;
 		//
 		case 'playername' : 
-			s.emit('create player',{
-				playername: playername,
-				player: input.value.substring(input.value.indexOf(' ')+1,input.value.length),
-				token: token,
-				color: '#'+Math.floor(Math.random()*16777215).toString(16),
-				renew: true
-			}); 
+			player.name = input.value.substring(input.value.indexOf(' ')+1,input.value.length);
+			player.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+			player.renew = true;
+			s.emit('player',player); 
 			break;
 		//
 		default: 
@@ -97,11 +102,10 @@ function happen() {
 }
 
 //
-s.emit('create player',{
-	playername: playername,
-	color: '#'+Math.floor(Math.random()*16777215).toString(16)
-});
+console.log('player:new:'+JSON.stringify(player));
+s.emit('player:new',player);
 
+//
 window.onunload = function () {
-	s.emit('player leaves',{playername:playername,token:token});
+	s.emit('player leaves',player);
 }

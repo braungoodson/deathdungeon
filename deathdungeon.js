@@ -5,7 +5,7 @@ var notice = clc.cyan;
 var deathdungeon = clc.red;
 var say = clc.green;
 
-console.log(deathdungeon('deathdungeon:')+' dungeon is open');
+console.log(deathdungeon('deathdungeon:')+'opened:'+(process.env.PORT || 24000));
 
 var fs = require('fs');
 var uuid = require('node-uuid');
@@ -19,6 +19,7 @@ function gotoJail(player) {
 	player.jailTime = 60000;
 	player.bail = player.jailTime;
 	player.releaseTime = new Date().getMilliseconds() + player.jailTime;
+	player.prisoner = true;
 }
 
 function searchAndJail() {
@@ -26,6 +27,7 @@ function searchAndJail() {
 		for (var i in players) {
 			if (players[i].murders > 5) {
 				gotoJail(players[i]);
+				console.log('deathdungeon:prisoner:'+players[i]);
 			}
 		}
 	}
@@ -33,9 +35,10 @@ function searchAndJail() {
 
 function searchAndFree() {
 	return function () {
-		for (var in players) {
+		for (var i in players) {
 			if (players[i].releaseTime <= new Date().getMilliseconds()) {
-				
+				players[i].prisoner = false;
+				console.log('deathdungeon:civilian:'+players[i].name);
 			}
 		}
 	}
@@ -46,7 +49,7 @@ setInterval(searchAndFree(),10000);
 
 var mario = require('mario-mario');
 mario.plumbing({
-	port: process.env.PORT || 80,
+	port: process.env.PORT || 24000,
 	http: {
 		get: {
 			'/' : function (q,r) {
@@ -91,6 +94,10 @@ mario.plumbing({
 		},
 		'kill player' : function(q) {
 			if (players[q.data.killer.token]) {
+				var player = players[q.data.killer.token];
+				if (player.prisoner) {
+					return q.io.emit('you are in prison');
+				}
 				if (playerTokens[q.data.victim.player]) {
 					var victimToken = playerTokens[q.data.victim.player];
 					q.io.broadcast('player killed',{
@@ -98,6 +105,7 @@ mario.plumbing({
 						color: players[victimToken].color
 					});
 					players[victimToken].color = '#ccc';
+					player.murders++;
 					console.log(deathdungeon('deathdungeon:murder:'+q.data.victim.player));
 					var _players = [];
 					for (var p in players) {
@@ -107,55 +115,38 @@ mario.plumbing({
 				}
 			}
 		},
-		'create player' : function(q) {
+		'player:new' : function(q) {
+
 			//
-			var token = null;
-			if (!q.data.token) {
-				token = uuid.v4();
-			} else {
-				token = q.data.token;
+			function player(player) {
+				this.token = player.token||uuid.v4(),
+				this.name = player.name||names[Math.floor(Math.random()*199)];
+				this.mutation = player.playername||species[Math.floor(Math.random()*3)];
+				this.color = player.color||'#'+Math.floor(Math.random()*16777215).toString(16);
+				this.murders = player.murders||0;
+				this.prisoner = player.prisoner||false;
+				this.jailTime = player.jailTime||0;
+				this.bail = player.bail||0;
+				this.releaseTime = player.releaseTime||0;
 			}
+
 			//
-			var player = null;
-			if (!q.data.player) {
-				player = names[Math.floor(Math.random()*199)] + " (" + species[Math.floor(Math.random()*3)] + ")";
-			} else {
-				player = q.data.player;
-			}
+			var player = new player({});
+
 			//
-			if (q.data.renew) {
-				for (var p in players) {
-					if (players[p].playername == player) {
-						return q.io.emit('player already exists');						
-					}
-				}
-			}
+			players[player.token] = player;
+
 			//
-			players[token] = {
-				playername: player,
-				color: q.data.color
-			};
-			//
-			if (q.data.playername) {
-				delete playerTokens[q.data.playername];
-			}
-			//
-			playerTokens[player] = token;
-			console.log(deathdungeon('deathdungeon:')+'welcome:'+notice(token+':'+player));
+			playerTokens[player.name] = player.token;
+
 			//
 			var _players = [];
 			for (var p in players) {
 				_players.push(players[p]);
 			}
 			//
-			return q.io.emit('here are your credentials',{
-				token: token,
-				playername: player,
-				color: q.data.color
-			}) + q.io.broadcast('here is a new player',{
-				playername: player,
-				color: q.data.color
-			}) + q.io.broadcast('players',{players:_players});
+			return q.io.emit('player:new',{player:player})
+				+ q.io.broadcast('players',{players:_players});
 		},
 		'someone said something' : function(q) {
 			console.log(deathdungeon('deathdungeon:')+say(q.data.token+':'+q.data.playername+': '+q.data.say));
