@@ -49,7 +49,7 @@ setInterval(searchAndFree(),10000);
 
 var mario = require('mario-mario');
 mario.plumbing({
-	port: process.env.PORT || 24000,
+	port: process.env.PORT || 80,
 	http: {
 		get: {
 			'/' : function (q,r) {
@@ -81,17 +81,19 @@ mario.plumbing({
 		}
 	},
 	socket: {
-		'player leaves' : function (q) {
-			if (players[q.data.token]) {
-				delete players[q.data.token];
-				delete playerTokens[q.data.playername];
+		/*'player:leaves' : function (q) {
+			console.log(q);
+			console.log(q.data);
+			if (players[q.data.player.token]) {
+				delete players[q.data.player.token];
+				delete playerTokens[q.data.player.name];
 				var _players = [];
 				for (var p in players) {
 					_players.push(players[p]);
 				}
 				q.io.broadcast('players',{players:_players});
 			}
-		},
+		},*/
 		'kill player' : function(q) {
 			if (players[q.data.killer.token]) {
 				var player = players[q.data.killer.token];

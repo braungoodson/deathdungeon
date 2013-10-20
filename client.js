@@ -1,6 +1,6 @@
-function player(player) {
+function Player(player) {
 	this.token = player.token;
-	this.playername = player.playername;
+	this.name = player.name;
 	this.color = player.color;
 	this.murders = player.murders;
 	this.prisoner = player.prisoner;
@@ -8,13 +8,24 @@ function player(player) {
 	this.bail = player.bail;
 	this.releaseTime = player.releaseTime;
 }
-var p = null;
+
+Player.prototype.save = function () {
+	if (window.localStorage) {
+		window.localStorage.setItem('player:'+this.name,this);
+	} else {
+		//
+	}
+}
+
+var player = new Player(window.localStorage.getItem('deathDungeonPlayer'));
+var players = [];
+//var p = null;
 var s = io.connect();
 
 //
 s.on('player:new',function(r){
-	console.log(r.player);
-	p = new player(r.player);
+	player = new Player(r.player);
+	player.save(player);
 });
 
 //
@@ -105,7 +116,7 @@ function happen() {
 console.log('player:new:'+JSON.stringify(player));
 s.emit('player:new',player);
 
-//
+/*//
 window.onunload = function () {
-	s.emit('player leaves',player);
-}
+	s.emit('player:leaves',player);
+}*/
