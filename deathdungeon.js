@@ -49,7 +49,7 @@ setInterval(searchAndFree(),10000);
 
 var mario = require('mario-mario');
 mario.plumbing({
-	port: process.env.PORT || 80,
+	port: process.env.PORT || 24000,
 	http: {
 		get: {
 			'/' : function (q,r) {
